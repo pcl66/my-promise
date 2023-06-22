@@ -1,9 +1,15 @@
 function Promise(executor) {
-  function resolve(data) {
+  this.state = 'pending'
+  this.result = null
 
+  const self = this
+  function resolve(data) {
+    self.state = 'fulfilled'
+    self.result = data
   }
   function reject(data) {
-
+    self.state = 'rejected'
+    self.result = data
   }
 
   executor(resolve, reject)
