@@ -20,5 +20,10 @@ function Promise(executor) {
 }
 
 Promise.prototype.then = function(onResolved, onRejected){
-
+  if(this.state === 'fulfilled') {
+    onResolved(this.result)
+  }
+  if(this.state === 'rejected') {
+    onRejected(this.result)
+  }
 }
