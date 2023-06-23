@@ -11,13 +11,19 @@
 <body>
   <script>
     let p = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('异步ok')
+      }, 1000)
       // resolve('ok')
-      reject('error')
+      // reject('error')
     })
     p.then((value) => {
       console.log(value)
     }, (reason) => {
       console.log(reason)
+    })
+    p.then(value => {
+      console.log('value', value)
     })
   </script>
 </body>
