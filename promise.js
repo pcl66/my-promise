@@ -1,6 +1,6 @@
 function Promise(executor) {
   this.state = 'pending'
-  this.result = null
+  this.result = undefined
   this.cb = []
   const self = this
   function resolve(data) {
@@ -29,18 +29,20 @@ function Promise(executor) {
 }
 
 Promise.prototype.then = function(onResolved, onRejected){
-  // 执行then函数时，promise的状态已经改变（同步）
-  if(this.state === 'fulfilled') {
-    onResolved(this.result)
-  }
-  if(this.state === 'rejected') {
-    onRejected(this.result)
-  }
-  // 执行器函数异步改变promise状态
-  if(this.state === 'pending') {
-    this.cb.push({
-      onResolved,
-      onRejected
-    })
-  }
+  return new Promise((resolve, reject) => {
+    // 执行then函数时，promise的状态已经改变（同步）
+    if(this.state === 'fulfilled') {
+      onResolved(this.result)
+    }
+    if(this.state === 'rejected') {
+      onRejected(this.result)
+    }
+    // 执行器函数异步改变promise状态
+    if(this.state === 'pending') {
+      this.cb.push({
+        onResolved,
+        onRejected
+      })
+    }
+  })
 }

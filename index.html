@@ -17,14 +17,16 @@
       // resolve('ok')
       // reject('error')
     })
-    p.then((value) => {
+    const res = p.then((value) => {
       console.log(value)
     }, (reason) => {
       console.log(reason)
     })
-    p.then(value => {
-      console.log('value', value)
-    })
+    // p.then(value => {
+    //   console.log('value', value)
+    // })
+
+    console.log('res', res)
   </script>
 </body>
 
