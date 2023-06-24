@@ -29,19 +29,76 @@ function Promise(executor) {
 }
 
 Promise.prototype.then = function(onResolved, onRejected){
-  return new Promise((resolve, reject) => {
+  return new Promise((resovle, reject) => {
+    const self = this
     // 执行then函数时，promise的状态已经改变（同步）
     if(this.state === 'fulfilled') {
-      onResolved(this.result)
+      try {
+        const result = onResolved(this.result)
+        if(result instanceof Promise) {
+          result.then(v =>{
+            resovle(v)
+          }, r => {
+            reject(r)
+          })
+        } else {
+          resovle(result)
+        }
+      } catch (error) {
+        reject(error)
+      }
     }
     if(this.state === 'rejected') {
-      onRejected(this.result)
+      try {
+        const result = onRejected(this.result)
+        if(result instanceof Promise) {
+          result.then(v => {
+            resovle(v)
+          }, r => {
+            reject(r)
+          })
+        } else {
+          resovle(result)
+        }
+      } catch (error) {
+        reject(error)
+      }
     }
     // 执行器函数异步改变promise状态
     if(this.state === 'pending') {
       this.cb.push({
-        onResolved,
-        onRejected
+        onResolved: function(){
+          try {
+            const result = onResolved(self.result)
+            if(result instanceof Promise) {
+              result.then(v =>{
+                resovle(v)
+              }, r => {
+                reject(r)
+              })
+            } else {
+              resovle(result)
+            }
+          } catch (error) {
+            reject(error)
+          }
+        },
+        onRejected: function() {
+          try {
+            const result = onRejected(self.result)
+            if(result instanceof Promise) {
+              result.then(v => {
+                resovle(v)
+              }, r => {
+                reject(r)
+              })
+            } else {
+              resovle(result)
+            }
+          } catch (error) {
+            reject(error)
+          }
+        }
       })
     }
   })

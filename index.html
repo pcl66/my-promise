@@ -12,21 +12,27 @@
   <script>
     let p = new Promise((resolve, reject) => {
       setTimeout(() => {
-        resolve('异步ok')
+        // resolve('异步ok')
+      reject('error')
       }, 1000)
       // resolve('ok')
-      // reject('error')
     })
-    const res = p.then((value) => {
-      console.log(value)
-    }, (reason) => {
-      console.log(reason)
-    })
-    // p.then(value => {
-    //   console.log('value', value)
+    // p.then((value) => {
+    //   console.log(value)
+    // }, (reason) => {
+    //   console.log(reason)
     // })
-
-    console.log('res', res)
+    const res = p.then(value => {
+      console.log('value', value)
+      return new Promise((_, reject) => {
+        _('hahah')
+      })
+    }, reason => {
+      return new Promise((_, __) => {
+        __('xxxx')
+      })
+    })
+    console.log(res)
   </script>
 </body>
 
