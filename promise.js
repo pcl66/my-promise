@@ -28,7 +28,7 @@ function Promise(executor) {
   }
 }
 
-Promise.prototype.then = function(onResolved, onRejected){
+Promise.prototype.then = function(onResolved, onRejected = r => { throw r }){
   return new Promise((resovle, reject) => {
     const self = this
     // 执行then函数时，promise的状态已经改变（同步）
@@ -102,4 +102,8 @@ Promise.prototype.then = function(onResolved, onRejected){
       })
     }
   })
+}
+
+Promise.prototype.catch = function(onRejected) {
+  return this.then(undefined, onRejected)
 }
